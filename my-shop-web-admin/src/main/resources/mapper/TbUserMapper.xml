@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.my.shop.web.admin.dao.TbUserDao" >
+    <sql id="tbUserColumns">
+          a.id,
+          a.username,
+          a.password,
+          a.phone,
+          a.email,
+          a.created,
+          a.updated
+    </sql>
+    <select id="selectAll" resultType="tbUser">
+        select
+            <include refid="tbUserColumns"/>
+        from
+            tb_user as a
+    </select>
+    <select id="insert">
+        insert into tb_user (
+        username,
+        password,
+        phone,
+        email,
+        created,
+        updated
+        )
+        values (
+        #{username},
+        #{password},
+        #{phone},
+        #{email},
+        #{created},
+        #{updated}
+        )
+    </select>
+    <delete id="delete">
+        delete from tb_user where id = #{id};
+    </delete>
+
+    <select id="selectOne" resultType="tbUser">
+        select
+           <include refid="tbUserColumns"/>
+        from
+            tb_user as a where id = #{id}
+    </select>
+
+    <update id="update">
+        update tb_user set
+            username=#{username},
+            password=#{password},
+            phone=#{phone},
+            email=#{email},
+            updated=#{updated}
+             where id=#{id}
+    </update>
+
+    <select id="getByEmail" resultType="tbUser">
+        select
+        <include refid="tbUserColumns"/>
+        from tb_user as a
+        where a.email=#{email}
+    </select>
+
+    <delete id="deleteMulti">
+        delete from tb_user where id in <foreach collection="array" open="(" close=")" separator="," item="id">
+        #{id}
+    </foreach>
+    </delete>
+
+    <select id="page" resultType="tbUser" parameterType="java.util.Map">
+        select <include refid="tbUserColumns"/> from tb_user as a
+        <where>
+            <if test="tbUser.username != null and tbUser.username != ''">
+                and a.username like concat ('%',#{tbUser.username},'%')
+            </if>
+            <if test="tbUser.email != null and tbUser.email != ''">
+                and a.email like concat ('%',#{tbUser.email},'%')
+            </if>
+            <if test="tbUser.phone != null and tbUser.phone != ''">
+            and a.phone like concat ('%',#{tbUser.phone},'%')
+            </if>
+        </where>
+        limit #{start},#{length}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from tb_user as a
+        <where>
+            <if test="username != null and username != ''">
+                and a.username like concat ('%',#{tbUser.username},'%')
+            </if>
+            <if test="email != null and email != ''">
+                and a.email like concat ('%',#{tbUser.email},'%')
+            </if>
+            <if test="phone != null and phone != ''">
+                and a.phone like concat ('%',#{tbUser.phone},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

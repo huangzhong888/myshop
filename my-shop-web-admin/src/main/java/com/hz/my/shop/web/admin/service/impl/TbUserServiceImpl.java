@@ -2,6 +2,7 @@ package com.hz.my.shop.web.admin.service.impl;
 import com.hz.my.shop.commons.dto.BaseResult;
 import com.hz.my.shop.commons.dto.PageInfo;
 import com.hz.my.shop.commons.utils.RegexpUtils;
+import com.hz.my.shop.commons.validator.BeanValidator;
 import com.hz.my.shop.domain.TbUser;
 import com.hz.my.shop.web.admin.dao.TbUserDao;
 import com.hz.my.shop.web.admin.service.TbUserService;
@@ -25,6 +26,7 @@ import java.util.Map;
 public class TbUserServiceImpl implements TbUserService {
     @Autowired
     private TbUserDao tbUserDao;
+
     @Override
     public List<TbUser> selectAll() {
 
@@ -33,12 +35,16 @@ public class TbUserServiceImpl implements TbUserService {
 
     @Override
     public BaseResult save(TbUser tbUser) {
-        BaseResult baseResult1 = checkTbUser(tbUser);
+        String validator = BeanValidator.validator(tbUser);
+        //验证不通过
+        if (validator != null) {
+            return BaseResult.fail(validator);
+        }
         //通过验证
-        if(baseResult1.getStatus()==BaseResult.STATUS_SUCCESS){
+        else {
             tbUser.setUpdated(new Date());
             //新增
-            if(tbUser.getId()==null){
+            if (tbUser.getId() == null) {
                 //密码需要加密处理
                 tbUser.setPassword(DigestUtils.md5DigestAsHex(tbUser.getPassword().getBytes()));
                 tbUser.setCreated(new Date());
@@ -48,9 +54,8 @@ public class TbUserServiceImpl implements TbUserService {
             else {
                 tbUserDao.update(tbUser);
             }
-            baseResult1.setMessage("保存用户信息成功");
+            return BaseResult.success("保存用户信息成功");
         }
-        return baseResult1;
     }
 
     @Override
@@ -72,11 +77,11 @@ public class TbUserServiceImpl implements TbUserService {
     @Override
     public TbUser login(String email, String password) {
         TbUser tbUser = tbUserDao.getByEmail(email);
-        if(tbUser!=null){
+        if (tbUser != null) {
             //明文密码加密
             String md5password = DigestUtils.md5DigestAsHex(password.getBytes());
             //判断加密后的密码是否和数据库的密码匹配
-            if(md5password.equals(tbUser.getPassword())){
+            if (md5password.equals(tbUser.getPassword())) {
                 return tbUser;
             }
         }
@@ -89,13 +94,13 @@ public class TbUserServiceImpl implements TbUserService {
     }
 
     @Override
-    public PageInfo<TbUser> page(int start, int length,int draw,TbUser tbUser) {
+    public PageInfo<TbUser> page(int start, int length, int draw, TbUser tbUser) {
         int count = tbUserDao.count(tbUser);
 
-        Map<String,Object> params = new HashMap<>();
-        params.put("start",start);
-        params.put("length",length);
-        params.put("tbUser",tbUser);
+        Map<String, Object> params = new HashMap<>();
+        params.put("start", start);
+        params.put("length", length);
+        params.put("tbUser", tbUser);
 
         PageInfo<TbUser> pageInfo = new PageInfo<>();
         pageInfo.setDraw(draw);
@@ -113,32 +118,4 @@ public class TbUserServiceImpl implements TbUserService {
     public int count(TbUser tbUser) {
         return tbUserDao.count(tbUser);
     }
-
-    /*
-    用户信息的有效性验证
-    非空验证、
-     */
-    public BaseResult checkTbUser(TbUser tbUser){
-        BaseResult baseResult = BaseResult.success();
-        if(StringUtils.isBlank(tbUser.getEmail())){
-            baseResult = BaseResult.fail("邮箱不能为空请重新输入");
-        }
-        else if(!RegexpUtils.checkEmail(tbUser.getEmail())){
-            baseResult = BaseResult.fail("邮箱格式错误，请重新输入");
-        }
-        else if (StringUtils.isBlank(tbUser.getPassword())){
-            baseResult = BaseResult.fail("密码不能为空请重新输入");
-        }
-        else if(StringUtils.isBlank(tbUser.getUsername())){
-            baseResult = BaseResult.fail("姓名不能为空请重新输入");
-        }
-        else if(StringUtils.isBlank(tbUser.getPhone())){
-            baseResult = BaseResult.fail("手机号不能为空请重新输入");
-        }
-        else if(!RegexpUtils.checkPhone(tbUser.getPhone())){
-            baseResult = BaseResult.fail("手机格式错误，请重新输入");
-        }
-        return baseResult;
-    }
-
 }

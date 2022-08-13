@@ -92,14 +92,14 @@
         select <include refid="tbContentColumns"/> from tb_content as a
         <include refid="tbContentJoins"/>
         <where>
-            <if test="tbContent.title != null and tbContent.title != ''">
-                and a.title like concat ('%',#{tbContent.title},'%')
+            <if test="pageParams.title != null and pageParams.title != ''">
+                and a.title like concat ('%',#{pageParams.title},'%')
             </if>
-            <if test="tbContent.subTitle != null and tbContent.subTitle != ''">
-                and a.sub_title like concat ('%',#{tbContent.subTitle},'%')
+            <if test="pageParams.subTitle != null and pageParams.subTitle != ''">
+                and a.sub_title like concat ('%',#{pageParams.subTitle},'%')
             </if>
-            <if test="tbContent.titleDesc != null and tbContent.titleDesc != ''">
-                and a.title_desc like concat ('%',#{tbContent.titleDesc},'%')
+            <if test="pageParams.titleDesc != null and pageParams.titleDesc != ''">
+                and a.title_desc like concat ('%',#{pageParams.titleDesc},'%')
             </if>
         </where>
         limit #{start},#{length}

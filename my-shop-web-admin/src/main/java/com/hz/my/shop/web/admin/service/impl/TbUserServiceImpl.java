@@ -4,9 +4,9 @@ import com.hz.my.shop.commons.dto.PageInfo;
 import com.hz.my.shop.commons.utils.RegexpUtils;
 import com.hz.my.shop.commons.validator.BeanValidator;
 import com.hz.my.shop.domain.TbUser;
+import com.hz.my.shop.web.admin.abstracts.AbstratBaseServiceImpl;
 import com.hz.my.shop.web.admin.dao.TbUserDao;
 import com.hz.my.shop.web.admin.service.TbUserService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -23,15 +23,7 @@ import java.util.Map;
  * @version: 1.0
  */
 @Service
-public class TbUserServiceImpl implements TbUserService {
-    @Autowired
-    private TbUserDao tbUserDao;
-
-    @Override
-    public List<TbUser> selectAll() {
-
-        return tbUserDao.selectAll();
-    }
+public class TbUserServiceImpl extends AbstratBaseServiceImpl<TbUser,TbUserDao> implements TbUserService {
 
     @Override
     public BaseResult save(TbUser tbUser) {
@@ -48,35 +40,19 @@ public class TbUserServiceImpl implements TbUserService {
                 //密码需要加密处理
                 tbUser.setPassword(DigestUtils.md5DigestAsHex(tbUser.getPassword().getBytes()));
                 tbUser.setCreated(new Date());
-                tbUserDao.insert(tbUser);
+                dao.insert(tbUser);
             }
             //修改编辑用户
             else {
-                tbUserDao.update(tbUser);
+                update(tbUser);
             }
             return BaseResult.success("保存用户信息成功");
         }
     }
 
     @Override
-    public void delete(Long id) {
-        tbUserDao.delete(id);
-    }
-
-    @Override
-    public TbUser selectOne(Long id) {
-        return tbUserDao.selectOne(id);
-    }
-
-    @Override
-    public void update(TbUser tbUser) {
-        tbUserDao.update(tbUser);
-    }
-
-
-    @Override
     public TbUser login(String email, String password) {
-        TbUser tbUser = tbUserDao.getByEmail(email);
+        TbUser tbUser = dao.getByEmail(email);
         if (tbUser != null) {
             //明文密码加密
             String md5password = DigestUtils.md5DigestAsHex(password.getBytes());
@@ -86,36 +62,5 @@ public class TbUserServiceImpl implements TbUserService {
             }
         }
         return null;
-    }
-
-    @Override
-    public void deleteMulti(String[] ids) {
-        tbUserDao.deleteMulti(ids);
-    }
-
-    @Override
-    public PageInfo<TbUser> page(int start, int length, int draw, TbUser tbUser) {
-        int count = tbUserDao.count(tbUser);
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("start", start);
-        params.put("length", length);
-        params.put("tbUser", tbUser);
-
-        PageInfo<TbUser> pageInfo = new PageInfo<>();
-        pageInfo.setDraw(draw);
-        pageInfo.setDraw(start);
-        pageInfo.setDraw(length);
-        pageInfo.setRecordsTotal(count);
-        pageInfo.setRecordsFiltered(count);
-        pageInfo.setData(tbUserDao.page(params));
-        System.out.println(pageInfo);
-
-        return pageInfo;
-    }
-
-    @Override
-    public int count(TbUser tbUser) {
-        return tbUserDao.count(tbUser);
     }
 }

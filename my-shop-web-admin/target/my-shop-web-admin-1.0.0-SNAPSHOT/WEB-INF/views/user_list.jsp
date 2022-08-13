@@ -152,7 +152,7 @@
                     var deleteUrl = "/user/delete";
                     return '<button type="button" class="btn  btn-default btn-sm" onclick="App.showDetail(\''+detailUrl+'\')">查看</button>' +
                         '<a href="/user/form?id='+row.id+'" type="button" class="btn  btn-primary btn-sm">编辑</a>' +
-                        '<a href="#" type="button" class="btn  btn-danger btn-sm">删除</a>';
+                        '<button type="button" class="btn btn-sm btn-danger" onclick="App.deleteSingle(\'' + deleteUrl + '\', \'' + row.id + '\')"><i class="fa fa-trash-o"></i> 删除</button>';
                 }
             }
         ];

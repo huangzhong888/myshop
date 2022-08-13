@@ -1,5 +1,7 @@
 package com.hz.my.shop.web.admin.dao;
 
+import com.hz.my.shop.commons.persistence.BaseDao;
+import com.hz.my.shop.commons.persistence.BaseTreeDao;
 import com.hz.my.shop.domain.TbContentCategory;
 import org.springframework.stereotype.Repository;
 
@@ -13,12 +15,6 @@ import java.util.List;
  */
 
 @Repository
-public interface TbContentCategoryDao {
+public interface TbContentCategoryDao extends BaseTreeDao<TbContentCategory> {
 
-    List<TbContentCategory> selectAll();
-
-    //根据父级节点id查询所有子节点
-    List<TbContentCategory> selectByPid(Long pid);
-
-    TbContentCategory getById(Long id);
 }

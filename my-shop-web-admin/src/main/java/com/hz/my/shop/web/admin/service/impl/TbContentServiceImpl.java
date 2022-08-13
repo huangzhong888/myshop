@@ -6,6 +6,7 @@ import com.hz.my.shop.commons.utils.RegexpUtils;
 import com.hz.my.shop.commons.validator.BeanValidator;
 import com.hz.my.shop.domain.TbContent;
 import com.hz.my.shop.domain.TbUser;
+import com.hz.my.shop.web.admin.abstracts.AbstratBaseServiceImpl;
 import com.hz.my.shop.web.admin.dao.TbContentDao;
 import com.hz.my.shop.web.admin.service.TbContentService;
 import org.apache.commons.lang3.StringUtils;
@@ -25,14 +26,7 @@ import java.util.Map;
  * @version: 1.0
  */
 @Service
-public class TbContentServiceImpl implements TbContentService {
-    @Autowired
-    private TbContentDao tbContentDao;
-
-    @Override
-    public List<TbContent> selectAll() {
-        return tbContentDao.selectAll();
-    }
+public class TbContentServiceImpl extends AbstratBaseServiceImpl<TbContent,TbContentDao> implements TbContentService {
 
     @Override
     public BaseResult save(TbContent tbContent) {
@@ -47,57 +41,14 @@ public class TbContentServiceImpl implements TbContentService {
             //新增
             if(tbContent.getId()==null){
                 tbContent.setCreated(new Date());
-                tbContentDao.insert(tbContent);
+                dao.insert(tbContent);
             }
             //修改编辑用户
             else {
-                tbContentDao.update(tbContent);
+                update(tbContent);
             }
            return BaseResult.success("保存信息成功");
         }
     }
 
-    @Override
-    public void delete(Long id) {
-        tbContentDao.delete(id);
-    }
-
-    @Override
-    public TbContent getById(Long id) {
-        return tbContentDao.getById(id);
-    }
-
-    @Override
-    public void update(TbContent tbContent) {
-        tbContentDao.update(tbContent);
-    }
-
-    @Override
-    public void deleteMulti(String[] ids) {
-        tbContentDao.deleteMulti(ids);
-    }
-
-    @Override
-    public PageInfo<TbContent> page(int start, int length,int draw,TbContent tbContent) {
-        int count = tbContentDao.count(tbContent);
-
-        Map<String,Object> params = new HashMap<>();
-        params.put("start",start);
-        params.put("length",length);
-        params.put("tbContent",tbContent);
-
-        PageInfo<TbContent> pageInfo = new PageInfo<>();
-        pageInfo.setDraw(draw);
-        pageInfo.setRecordsTotal(count);
-        pageInfo.setRecordsFiltered(count);
-        pageInfo.setData(tbContentDao.page(params));
-        System.out.println(pageInfo);
-
-        return pageInfo;
-    }
-
-    @Override
-    public int count(TbContent tbContent) {
-        return tbContentDao.count(tbContent);
-    }
 }

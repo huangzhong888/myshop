@@ -175,7 +175,7 @@
 
     App.initDropzone({
         id:"#dropz",
-        url:"upload",
+        url:"/upload",
         init:function () {
             this.on("success",function (file,data) {
                 $("#pic").val(data.filename);

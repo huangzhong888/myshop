@@ -2,6 +2,7 @@ package com.hz.my.shop.web.admin.service;
 
 import com.hz.my.shop.commons.dto.BaseResult;
 import com.hz.my.shop.commons.dto.PageInfo;
+import com.hz.my.shop.commons.persistence.BaseService;
 import com.hz.my.shop.domain.TbContent;
 import com.hz.my.shop.domain.TbUser;
 
@@ -15,33 +16,7 @@ import java.util.Map;
  * @version: 1.0
  */
 
-public interface TbContentService {
+public interface TbContentService extends BaseService<TbContent>{
 
-    /*
-   查询全部内容
-    */
-    List<TbContent> selectAll();
 
-    /*
-    新增内容
-     */
-    BaseResult save(TbContent tbContent);
-
-    //删除
-    void delete(Long id);
-
-    //根据id查询内容
-    TbContent getById(Long id);
-
-    //更新内容信息
-    void  update(TbContent tbContent);
-
-    //批量删除
-    void deleteMulti(String[] ids);
-
-    //分页查询
-    PageInfo<TbContent> page(int start, int length, int draw, TbContent tbContent);
-
-    //查询总笔数
-    int count(TbContent tbContent);
 }

@@ -11,7 +11,7 @@
     <jsp:include page="../includes/header.jsp" />
     <link rel="stylesheet" href="/static/assets/plugins/jquery-ztree/css/zTreeStyle/zTreeStyle.min.css" />
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     <jsp:include page="../includes/nav.jsp" />
     <jsp:include page="../includes/menu.jsp" />
@@ -19,28 +19,32 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>
-                内容管理
-                <small></small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li class="active">控制面板</li>
-            </ol>
-        </section>
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">内容管理</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/main">首页</a></li>
+                            <li class="breadcrumb-item active">内容管理</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
 
         <!-- Main content -->
         <section class="content">
+            <c:if test="${baseResult != null}">
+                <div class="alert alert-${baseResult.status == 200 ? "success" : "danger"} alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        ${baseResult.message}
+                </div>
+            </c:if>
             <div class="row">
-                <div class="col-xs-12">
-                    <c:if test="${baseResult != null}">
-                        <div class="alert alert-${baseResult.status == 200 ? "success" : "danger"} alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                ${baseResult.message}
-                        </div>
-                    </c:if>
-
+                <div class="col-12">
                     <div class="box box-info">
                         <div class="box-header with-border">
                             <h3 class="box-title">${tbContentCategory.id == null ? "新增" : "编辑"}分类</h3>

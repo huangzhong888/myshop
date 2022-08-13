@@ -47,12 +47,12 @@ public class TbUserServiceTest {
     }
     @Test
     public void selectOne(){
-        TbUser tbUser = tbUserService.selectOne(36L);
+        TbUser tbUser = tbUserService.getById(36L);
         System.out.println(tbUser);
     }
     @Test
     public void update(){
-        TbUser tbUser = tbUserService.selectOne(36L);
+        TbUser tbUser = tbUserService.getById(36L);
         tbUser.setUsername("lusifer");
         tbUserService.update(tbUser);
     }

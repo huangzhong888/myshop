@@ -38,7 +38,7 @@
         delete from tb_user where a.id = #{id};
     </delete>
 
-    <select id="selectOne" resultType="tbUser">
+    <select id="getById" resultType="tbUser">
         select
            <include refid="tbUserColumns"/>
         from
@@ -71,14 +71,14 @@
     <select id="page" resultType="tbUser" parameterType="java.util.Map">
         select <include refid="tbUserColumns"/> from tb_user as a
         <where>
-            <if test="tbUser.username != null and tbUser.username != ''">
-                and a.username like concat ('%',#{tbUser.username},'%')
+            <if test="pageParams.username != null and pageParams.username != ''">
+                and a.username like concat ('%',#{pageParams.username},'%')
             </if>
-            <if test="tbUser.email != null and tbUser.email != ''">
-                and a.email like concat ('%',#{tbUser.email},'%')
+            <if test="pageParams.email != null and pageParams.email != ''">
+                and a.email like concat ('%',#{pageParams.email},'%')
             </if>
-            <if test="tbUser.phone != null and tbUser.phone != ''">
-            and a.phone like concat ('%',#{tbUser.phone},'%')
+            <if test="pageParams.phone != null and pageParams.phone != ''">
+            and a.phone like concat ('%',#{pageParams.phone},'%')
             </if>
         </where>
         limit #{start},#{length}
@@ -88,13 +88,13 @@
         select count(*) from tb_user as a
         <where>
             <if test="username != null and username != ''">
-                and a.username like concat ('%',#{tbUser.username},'%')
+                and a.username like CONCAT ('%',#{username},'%')
             </if>
             <if test="email != null and email != ''">
-                and a.email like concat ('%',#{tbUser.email},'%')
+                and a.email like CONCAT ('%',#{email},'%')
             </if>
             <if test="phone != null and phone != ''">
-                and a.phone like concat ('%',#{tbUser.phone},'%')
+                and a.phone like CONCAT ('%',#{phone},'%')
             </if>
         </where>
     </select>

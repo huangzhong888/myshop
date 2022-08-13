@@ -9,6 +9,7 @@ import com.hz.my.shop.web.admin.dao.TbContentCategoryDao;
 import com.hz.my.shop.web.admin.service.TbContentCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Validation;
 import java.util.Date;
@@ -21,9 +22,11 @@ import java.util.List;
  * @version: 1.0
  */
 @Service
+@Transactional(readOnly = true)
 public class TbContentCategoryServiceImpl extends AbstractBaseTreeServiceImpl<TbContentCategory,TbContentCategoryDao> implements TbContentCategoryService {
 
     @Override
+    @Transactional(readOnly = false)
     public BaseResult save(TbContentCategory entity) {
         String validator = BeanValidator.validator(entity);
         if(validator!=null){

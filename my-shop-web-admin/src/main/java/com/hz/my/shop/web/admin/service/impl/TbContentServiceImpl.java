@@ -12,6 +12,7 @@ import com.hz.my.shop.web.admin.service.TbContentService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
@@ -26,9 +27,11 @@ import java.util.Map;
  * @version: 1.0
  */
 @Service
+@Transactional(readOnly = true)
 public class TbContentServiceImpl extends AbstratBaseServiceImpl<TbContent,TbContentDao> implements TbContentService {
 
     @Override
+    @Transactional(readOnly = false)
     public BaseResult save(TbContent tbContent) {
         String validator = BeanValidator.validator(tbContent);
         //验证不通过

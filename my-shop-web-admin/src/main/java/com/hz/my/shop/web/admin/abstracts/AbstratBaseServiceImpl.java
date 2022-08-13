@@ -7,6 +7,7 @@ import com.hz.my.shop.commons.persistence.BaseEntity;
 import com.hz.my.shop.commons.persistence.BaseService;
 import com.hz.my.shop.domain.TbContent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,7 @@ public abstract class AbstratBaseServiceImpl<T extends BaseEntity,D extends Base
 
     //删除信息
     @Override
+    @Transactional(readOnly = false)
     public void delete(Long id) {
         dao.delete(id);
     }
@@ -43,12 +45,14 @@ public abstract class AbstratBaseServiceImpl<T extends BaseEntity,D extends Base
 
     //更新信息
     @Override
+    @Transactional(readOnly = false)
     public void update(T entity) {
         dao.update(entity);
     }
 
     //批量删除
     @Override
+    @Transactional(readOnly = false)
     public void deleteMulti(String[] ids) {
         dao.deleteMulti(ids);
     }

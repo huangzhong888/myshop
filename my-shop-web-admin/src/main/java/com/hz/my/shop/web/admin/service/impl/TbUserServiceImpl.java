@@ -9,6 +9,7 @@ import com.hz.my.shop.web.admin.dao.TbUserDao;
 import com.hz.my.shop.web.admin.service.TbUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
@@ -23,9 +24,11 @@ import java.util.Map;
  * @version: 1.0
  */
 @Service
+@Transactional(readOnly = true)
 public class TbUserServiceImpl extends AbstratBaseServiceImpl<TbUser,TbUserDao> implements TbUserService {
 
     @Override
+    @Transactional(readOnly = false)
     public BaseResult save(TbUser tbUser) {
         String validator = BeanValidator.validator(tbUser);
         //验证不通过
